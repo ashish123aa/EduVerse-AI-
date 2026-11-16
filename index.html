@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2563eb">
+<title>EduVerse AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f1f4fa;--card:#fff;--text:#0f172a;--muted:#64748b;--pri:#2563eb;--pri2:#1d4ed8;--acc:#0ea5e9;--bd:#e3e8f2;--ok:#dcfce7;--bad:#fee2e2;--sh:0 4px 16px rgba(15,23,42,.06);--grad:linear-gradient(135deg,#2563eb,#4f46e5);--frame:#0b1020;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1020;--card:#151b2e;--text:#e8ecf8;--muted:#8f9bbd;--bd:#252d47;--ok:#14532d;--bad:#7f1d1d;--sh:0 4px 16px rgba(0,0,0,.35);--frame:#1c2540;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0b1020;--card:#151b2e;--text:#e8ecf8;--muted:#8f9bbd;--bd:#252d47;--ok:#14532d;--bad:#7f1d1d;--sh:0 4px 16px rgba(0,0,0,.35);--frame:#1c2540;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;background:var(--bg)}
+body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased}
+#shell{height:100%;max-width:480px;margin:0 auto;display:flex;flex-direction:column;background:var(--bg);position:relative;overflow:hidden}
+@media (min-width:600px){body{display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#dbe4ff,#e9e4ff)}
+:root[data-theme="dark"] body,:root:not([data-theme="light"]) body{}
+#shell{height:min(860px,calc(100% - 28px));width:420px;border-radius:38px;border:9px solid var(--frame);box-shadow:0 30px 70px rgba(15,23,42,.35)}}
+header{display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--card);border-bottom:1px solid var(--bd);flex:none}
+header .ttl{font-weight:700;font-size:17px;margin-right:auto}
+.logo{font-weight:700;font-size:18px;margin-right:auto;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ib{background:var(--bg);color:var(--text);border:1px solid var(--bd);width:36px;height:36px;padding:0;border-radius:12px;display:grid;place-items:center;font-size:16px;box-shadow:none}
+.av{width:36px;height:36px;border-radius:50%;background:var(--grad);color:#fff;font-weight:700;font-size:14px;display:grid;place-items:center;border:0;padding:0}
+#app{flex:1;overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch}
+#app.fill{overflow:hidden;padding:0;display:flex;flex-direction:column}
+.tabs{display:flex;background:var(--card);border-top:1px solid var(--bd);padding:6px 6px 8px;flex:none}
+.tabs button{flex:1;background:none;color:var(--muted);border:0;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:500;padding:6px 0;border-radius:12px;box-shadow:none}
+.tabs button.on{color:var(--pri)}
+.tabs button.on svg{stroke-width:2.4}
+h2{font-size:22px;margin:2px 0 12px}h3{font-size:16px;margin:0 0 10px}
+.sec{display:flex;justify-content:space-between;align-items:center;margin:20px 2px 10px;font-weight:600}
+.sec a{font-size:13px;font-weight:500;color:var(--pri);cursor:pointer}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:16px;margin-bottom:12px;box-shadow:var(--sh)}
+.hero{background:var(--grad);color:#fff;border-radius:22px;padding:20px;box-shadow:0 10px 26px rgba(37,99,235,.35);margin-bottom:14px}
+.hero small{opacity:.85}.hero h2{margin:2px 0 10px;font-size:23px}
+.hero .pill{display:inline-block;background:rgba(255,255,255,.18);padding:5px 12px;border-radius:999px;font-size:13px;margin:0 6px 6px 0}
+.hero button{background:#fff;color:var(--pri2);margin-top:6px}
+input,textarea,select{width:100%;padding:12px 14px;border:1px solid var(--bd);border-radius:12px;background:var(--bg);color:var(--text);font:inherit;margin:5px 0;outline:0}
+input:focus,textarea:focus,select:focus{border-color:var(--pri);box-shadow:0 0 0 3px rgba(37,99,235,.18)}
+select{width:auto}
+button{background:var(--grad);color:#fff;border:0;padding:11px 16px;border-radius:12px;font:inherit;font-weight:600;cursor:pointer;transition:opacity .15s,transform .1s}
+button:active{transform:scale(.97)}
+button.g{background:transparent;color:var(--pri);border:1px solid var(--pri)}
+button.d{background:#ef4444}button.sm{padding:7px 12px;font-size:13px}
+.row{display:flex;gap:8px;align-items:center}.row input{margin:0}.wrap{flex-wrap:wrap}.sp{justify-content:space-between}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:12px;text-align:center;box-shadow:var(--sh);cursor:pointer}
+.stat b{display:block;font-size:22px;color:var(--pri)}.stat span{font-size:12px;color:var(--muted)}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;box-shadow:var(--sh);cursor:pointer}
+.tile i{font-style:normal;display:grid;place-items:center;width:42px;height:42px;border-radius:13px;font-size:21px;margin-bottom:8px;background:var(--bg)}
+.tile b{display:block;font-size:14px}.tile span{font-size:12px;color:var(--muted)}
+.item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:12px;margin-bottom:8px}
+.item .grow{flex:1;min-width:0}.item .t{font-weight:600;overflow:hidden;text-overflow:ellipsis}
+.chk{width:26px;height:26px;border-radius:50%;border:2px solid var(--pri);background:none;padding:0;flex:none;color:#fff;box-shadow:none}
+.chk.on{background:var(--pri)}
+.m{color:var(--muted);font-size:13px}
+.tag{font-size:11px;padding:2px 9px;border-radius:999px;background:var(--bd);margin-left:6px;white-space:nowrap;font-weight:600}
+.tag.High,.tag.late{background:#fee2e2;color:#991b1b}.tag.Medium{background:#fef3c7;color:#92400e}.tag.Low,.tag.today{background:#dcfce7;color:#166534}
+.bar{height:9px;background:var(--bd);border-radius:6px;overflow:hidden;margin:8px 0}.bar i{display:block;height:100%;background:var(--grad);border-radius:6px;transition:width .4s}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0}.chips button{padding:7px 13px;border-radius:999px;font-size:13px}
+.chips.sc{flex-wrap:nowrap;overflow-x:auto;padding:0 12px;scrollbar-width:none;margin:6px 0}.chips.sc button{white-space:nowrap}
+.chat{display:flex;flex-direction:column;height:100%}
+.chatbar{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;font-weight:600}
+#cb{flex:1;overflow-y:auto;padding:4px 14px}
+.msg{padding:11px 15px;border-radius:18px;margin:8px 0;max-width:88%;white-space:pre-wrap;font-size:15px;line-height:1.55}
+.msg.user{background:var(--grad);color:#fff;margin-left:auto;border-bottom-right-radius:5px}
+.msg.ai{background:var(--card);border:1px solid var(--bd);border-bottom-left-radius:5px;white-space:normal;line-height:1.6}
+.msg.ai>*:first-child{margin-top:0}.msg.ai>*:last-child{margin-bottom:0}
+.msg.ai p{margin:0 0 10px}
+.msg.ai h4{margin:14px 0 6px;font-size:15px;color:var(--pri);padding-bottom:4px;border-bottom:1px solid var(--bd)}
+.msg.ai ul,.msg.ai ol{margin:0 0 10px;padding-left:20px}.msg.ai li{margin:4px 0}
+.msg.ai li::marker{color:var(--pri);font-weight:700}
+.msg.ai b{font-weight:700}
+.msg.ai code{background:var(--bg);border:1px solid var(--bd);padding:1px 6px;border-radius:6px;font-size:13px}
+.msg.ai pre{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:10px 12px;overflow-x:auto;font-size:13px;margin:0 0 10px;white-space:pre}
+.msg.ai hr{border:0;border-top:1px solid var(--bd);margin:12px 0}
+.msg.ai .tb{overflow-x:auto;margin:0 0 10px}.msg.ai table{border-collapse:collapse;font-size:13px;width:100%}
+.msg.ai th,.msg.ai td{border:1px solid var(--bd);padding:6px 9px;text-align:left}.msg.ai th{background:var(--bg)}
+.dots{display:inline-flex;gap:4px;padding:4px 0}.dots i{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:bl 1.2s infinite}
+.dots i:nth-child(2){animation-delay:.2s}.dots i:nth-child(3){animation-delay:.4s}
+@keyframes bl{0%,80%,100%{opacity:.25;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+.hl{outline:3px solid var(--acc);box-shadow:0 0 0 6px rgba(14,165,233,.2)}
+.composer{display:flex;gap:8px;padding:8px 12px 12px;background:var(--bg)}.composer input{margin:0;border-radius:999px;padding:13px 16px;font-size:16px}
+.send{width:46px;height:46px;padding:0;border-radius:50%;display:grid;place-items:center;flex:none}
+.empty{text-align:center;padding:26px 10px;color:var(--muted)}.empty .big{font-size:38px}
+.opt{display:flex;gap:10px;padding:11px 12px;border:1px solid var(--bd);border-radius:12px;margin:7px 0;cursor:pointer}.opt input{width:auto;margin:0}
+.opt.ok{background:var(--ok);border-color:#16a34a}.opt.bad{background:var(--bad);border-color:#dc2626}
+.dn{text-decoration:line-through;color:var(--muted)}.err{color:#ef4444;font-size:14px}
+.flip{min-height:200px;display:grid;place-items:center;text-align:center;padding:24px;border-radius:22px;background:var(--grad);color:#fff;font-size:20px;font-weight:600;cursor:pointer;box-shadow:0 10px 26px rgba(37,99,235,.3)}
+.flip.back{background:var(--card);color:var(--text);border:2px solid var(--pri);font-weight:500;font-size:17px}
+.ring{display:block;margin:6px auto;position:relative;width:200px;height:200px}.ring svg{transform:rotate(-90deg)}
+.ring .tt{position:absolute;inset:0;display:grid;place-items:center;font-size:42px;font-weight:700}
+.wk{display:flex;gap:8px;align-items:flex-end;height:90px;margin-top:8px}.wk div{flex:1;text-align:center;font-size:11px;color:var(--muted)}.wk i{display:block;background:var(--grad);border-radius:6px 6px 0 0;min-height:3px;margin-bottom:4px}
+.hero2{text-align:center;padding:36px 20px 20px;background:var(--grad);color:#fff;border-radius:0 0 34px 34px}
+.hero2 .lg{font-size:48px}.hero2 h1{margin:6px 0;font-size:28px}.hero2 p{margin:0;opacity:.88}
+.auth{flex:1;overflow-y:auto}
+.fab{position:absolute}
+.sw{display:flex;gap:6px}.sw button{flex:1}
+.proT{display:inline-block;background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;-webkit-text-fill-color:#fff;font-size:10px;font-weight:800;letter-spacing:.5px;padding:2px 8px;border-radius:999px;vertical-align:middle}
+.pro-box{background:linear-gradient(135deg,#1e1b4b,#4338ca);color:#fff;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 10px 26px rgba(67,56,202,.35)}
+.pro-box.on{background:linear-gradient(135deg,#065f46,#059669)}
+.pro-box .pp{font-size:24px;font-weight:800;color:#fbbf24}.pro-box .pp small{font-size:12px;font-weight:500;color:#fde68a}
+.pro-box ul.pl{padding-left:0;list-style:none;margin:10px 0;font-size:14px}.pro-box ul.pl li{margin:7px 0}
+button.gold{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1f2937;width:100%}
+.pro-box button.g2{background:rgba(255,255,255,.18);color:#fff}
+.proHero{background:linear-gradient(135deg,#1e1b4b,#4338ca 60%,#7c3aed);color:#fff;border-radius:22px;padding:22px;text-align:center;margin-bottom:14px;box-shadow:0 10px 26px rgba(67,56,202,.35)}
+.proHero .pr{font-size:46px;font-weight:800;color:#fbbf24;line-height:1.1}.proHero .pr small{font-size:15px;color:#fde68a;font-weight:500}
+.feat{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--bd)}.feat:last-child{border:0;padding-bottom:0}
+.feat i{font-style:normal;font-size:24px;background:var(--bg);width:46px;height:46px;border-radius:13px;display:grid;place-items:center;flex:none}
+.cmp{width:100%;border-collapse:collapse;font-size:13px}.cmp th,.cmp td{padding:9px 6px;border-bottom:1px solid var(--bd);text-align:center}.cmp td:first-child,.cmp th:first-child{text-align:left}
+.cmp th:last-child,.cmp td:last-child{background:rgba(245,158,11,.14);font-weight:700}
+.step{display:flex;align-items:center;gap:8px;font-weight:700;margin-bottom:8px}.step span{width:24px;height:24px;border-radius:50%;background:var(--grad);color:#fff;display:grid;place-items:center;font-size:12px}
+.drop{display:block;border:2px dashed var(--pri);border-radius:14px;padding:24px;text-align:center;cursor:pointer;color:var(--pri);background:rgba(37,99,235,.05)}
+details{margin:10px 0}summary{cursor:pointer;color:var(--pri)}
+.ok2{color:#16a34a;font-size:14px}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
+</head>
+<body>
+<div id="shell"></div>
+<script>
+let mem=null;
+function load(){try{const r=localStorage.getItem("eduverse_db");if(r)return JSON.parse(r)}catch(e){}return mem||{users:{},session:null}}
+function save(){try{localStorage.setItem("eduverse_db",JSON.stringify(DB))}catch(e){}mem=DB}
+let DB=load(),tab="home",sub=null,mode="login",sample=null;
+const S={dsel:null,pf:"all",pedit:null,nform:false,nq:"",quiz:[],qtopic:"",qsaved:false,deck:null,ci:0,flip:false,arm:{},chatFocus:null};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const $=id=>document.getElementById(id);
+const me=()=>DB.users[DB.session],D=()=>me().data;
+const fmtD=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const today=()=>fmtD(new Date());
+function dueLbl(x){if(!x)return"";const t=today();if(x<t)return"Overdue";if(x==t)return"Today";const n=new Date();n.setDate(n.getDate()+1);return x==fmtD(n)?"Tomorrow":x}
+async function hash(p){try{const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("ev:"+p));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}catch(e){return "p:"+p}}
+async function ai(prompt,history){
+  const messages=history||[{role:"user",content:prompt}];
+  try{
+    const r=await fetch("/api/ai",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages})});
+    const j=await r.json();return j.text||j.error||"AI error. Please try again.";
+  }catch(e){return "Cannot reach the AI server. Make sure app.py is running."}
+}
+function blobB64(b){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(",")[1]);r.onerror=rej;r.readAsDataURL(b)})}
+async function aiImage(prompt,blob){
+  const data=await blobB64(blob);
+  const messages=[{role:"user",content:[{type:"image",source:{type:"base64",media_type:"image/jpeg",data}},{type:"text",text:prompt}]}];
+  const r=await fetch("/api/ai",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages})});
+  const j=await r.json();return j.text||j.error||"AI error. Please try again.";
+}
+const DOTS='<span class="dots"><i></i><i></i><i></i></span>';
+function md(t){
+  const inl=x=>x.replace(/`([^`]+)`/g,"<code>$1</code>").replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>").replace(/(^|[^*\w])\*([^*\s][^*]*?)\*(?!\w)/g,"$1<i>$2</i>");
+  let h="",ul=0,ol=0,code=0,tb=[];
+  const close=()=>{if(ul){h+="</ul>";ul=0}if(ol){h+="</ol>";ol=0}};
+  const flush=()=>{if(!tb.length)return;const rows=tb.filter(r=>!/^\s*\|?[\s:|-]+\|?\s*$/.test(r)||!/-/.test(r)).map(r=>r.trim().replace(/^\||\|$/g,"").split("|").map(c=>c.trim()));
+    h+='<div class="tb"><table>'+rows.map((r,i)=>"<tr>"+r.map(c=>`<${i?"td":"th"}>${inl(c)}</${i?"td":"th"}>`).join("")+"</tr>").join("")+"</table></div>";tb=[]};
+  for(const l of esc(t).replace(/\r/g,"").split("\n")){
+    if(/^```/.test(l)){flush();close();h+=code?"</pre>":"<pre>";code=!code;continue}
+    if(code){h+=l+"\n";continue}
+    if(/^\s*\|.*\|\s*$/.test(l)){close();tb.push(l);continue}
+    flush();let m;
+    if(m=l.match(/^#{1,4}\s+(.*)/)){close();h+=`<h4>${inl(m[1])}</h4>`}
+    else if(m=l.match(/^\s*[-*\u2022]\s+(.*)/)){if(ol){h+="</ol>";ol=0}if(!ul){h+="<ul>";ul=1}h+=`<li>${inl(m[1])}</li>`}
+    else if(m=l.match(/^\s*\d+[.)]\s+(.*)/)){if(ul){h+="</ul>";ul=0}if(!ol){h+="<ol>";ol=1}h+=`<li>${inl(m[1])}</li>`}
+    else if(/^\s*(---+|\*\*\*+)\s*$/.test(l)){close();h+="<hr>"}
+    else if(!l.trim()){close()}
+    else{close();h+=`<p>${inl(l)}</p>`}
+  }
+  flush();close();if(code)h+="</pre>";return h}
+const FMT=" Format your answer in clean Markdown: begin with a one-line direct answer, then short sections using ## headings only when useful, bullet points, **bold** for key terms, and a brief example when helpful. Use simple language, no long paragraphs, and keep it under about 200 words unless more detail is requested.";
+function twice(k,btn,label,fn){ // two-tap confirm without popups
+  if(!S.arm[k]){S.arm[k]=1;btn.textContent="Tap again to confirm";setTimeout(()=>{S.arm[k]=0;if(btn.isConnected)btn.textContent=label},3500);return}
+  S.arm[k]=0;fn()}
+function mark(){D().act[today()]=1;save()}
+function streak(){let n=0;const d=new Date(),A=D().act;if(!A[fmtD(d)])d.setDate(d.getDate()-1);while(A[fmtD(d)]){n++;d.setDate(d.getDate()-1)}return n}
+// ---------- icons / theme
+const IC={home:'<path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>',chat:'<path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-5.4A8 8 0 1 1 21 12z"/>',notes:'<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/>',plan:'<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18M9 16l2 2 4-4"/>',tools:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',back:'<path d="M15 18l-6-6 6-6"/>',send:'<path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/>',check:'<path d="M5 12l5 5 9-10"/>'};
+const svg=(k,s=22)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${IC[k]}</svg>`;
+function isDark(){const t=document.documentElement.dataset.theme;return t?t=="dark":matchMedia("(prefers-color-scheme:dark)").matches}
+function setTheme(t){document.documentElement.dataset.theme=t;try{localStorage.setItem("ev_theme",t)}catch(e){}render()}
+try{const t=localStorage.getItem("ev_theme");if(t&&t!="auto")document.documentElement.dataset.theme=t}catch(e){}
+// ---------- shell
+const TABS=[["home","Home"],["chat","Chat"],["notes","Notes"],["plan","Planner"],["tools","Tools"]];
+const TITLES={quiz:"Quiz",cards:"Flashcards",focus:"Focus Timer",attend:"Attendance",gpa:"GPA Calculator",profile:"Profile",pro:"EduVerse Pro",photo:"Photo Solver",pdf:"PDF Assistant"};
+function go(t,s){tab=t;sub=s||null;render();const a=$("app");if(a)a.scrollTop=0}
+function migrate(){const d=D();d.tasks.forEach(t=>{t.pri=t.pri||"Medium";t.subj=t.subj||""});
+  Object.assign(d,{quizzes:d.quizzes||[],decks:d.decks||[],act:d.act||{},focus:d.focus||{},attend:d.attend||[],gpa:d.gpa||[{n:"",c:3,g:10}],pro:d.pro||{on:false},pdfs:d.pdfs||[]})}
+function render(){
+  const sh=$("shell");
+  if(!DB.session||!me()){sh.innerHTML=authHTML();return}
+  migrate();
+  if((sub=="photo"||sub=="pdf")&&!D().pro.on)sub="pro";
+  const ini=me().name.trim().split(/\s+/).map(x=>x[0]).join("").slice(0,2).toUpperCase();
+  sh.innerHTML=`<header>${sub?`<button class="ib" onclick="back()">${svg("back",20)}</button><div class="ttl">${TITLES[sub]}</div>`:`<div class="logo">🎓 EduVerse${D().pro.on?' <span class="proT">PRO</span>':""}</div>`}
+  <button class="ib" onclick="setTheme(isDark()?'light':'dark')">${isDark()?"☀️":"🌙"}</button><button class="av" onclick="go('${tab}','profile')">${esc(ini)}</button></header>
+  <div id="app" class="${tab=="chat"&&!sub?"fill":""}"></div>
+  <div class="tabs">${TABS.map(([k,l])=>`<button class="${k==tab&&sub!="profile"?"on":""}" onclick="go('${k}')">${svg(k)}${l}</button>`).join("")}</div>`;
+  const el=$("app");
+  if(sub)({quiz:vQuiz,cards:vCards,focus:vFocus,attend:vAttend,gpa:vGpa,profile:vProfile,pro:vPro,photo:vPhoto,pdf:vPdf})[sub](el);
+  else ({home:vHome,chat:vChat,notes:vNotes,plan:vPlan,tools:vTools})[tab](el);
+}
+function back(){if(sub=="pro"&&S.prev){const p=S.prev;S.prev=null;return go(p[0],p[1])}if(sub=="cards"&&S.deck){S.deck=null;return render()}if(sub=="profile")return go(tab);go("tools")}
+// ---------- auth
+function authHTML(){return `<div class="auth"><div class="hero2"><div class="lg">🎓</div><h1>EduVerse AI</h1><p>Your smart study companion</p></div>
+  <div style="padding:18px"><div class="card"><h3>${mode=="login"?"Welcome back":"Create your account"}</h3>
+  ${mode=="signup"?'<input id="nm" placeholder="Full name">':""}
+  <input id="em" type="email" placeholder="Email"><input id="pw" type="password" placeholder="Password (min 6 characters)">
+  <div id="er" class="err"></div><button style="width:100%;margin-top:6px" onclick="doAuth()">${mode=="login"?"Login":"Create account"}</button>
+  <p class="m" style="text-align:center">${mode=="login"?"New here?":"Already registered?"} <a href="#" style="color:var(--pri);font-weight:600" onclick="mode='${mode=="login"?"signup":"login"}';render();return false">${mode=="login"?"Sign up":"Login"}</a></p></div>
+  <p class="m" style="text-align:center">AI Tutor · Notes · Planner · Quiz · Flashcards · Focus Timer · Attendance · GPA<br>Each user’s data is private and stored only in this browser (demo).</p></div></div>`}
+async function doAuth(){
+  const em=$("em").value.trim().toLowerCase(),pw=$("pw").value,er=$("er");
+  if(!em||pw.length<6){er.textContent="Enter an email and a password of at least 6 characters.";return}
+  const h=await hash(pw);
+  if(mode=="signup"){const nm=$("nm").value.trim();
+    if(!nm){er.textContent="Enter your name.";return}
+    if(DB.users[em]){er.textContent="This email is already registered.";return}
+    DB.users[em]={name:nm,pw:h,data:{chat:[],notes:[],pdfs:[],tasks:[]}};
+  }else if(!DB.users[em]||DB.users[em].pw!==h){er.textContent="Incorrect email or password.";return}
+  DB.session=em;save();tab="home";sub=null;render();
+}
+function logout(){DB.session=null;T.run=false;clearInterval(T.iv);save();tab="home";sub=null;render()}
+// ---------- home
+function vHome(el){
+  const d=D(),td=today(),h=new Date().getHours(),g=h<12?"Good morning":h<17?"Good afternoon":"Good evening";
+  const pend=d.tasks.filter(t=>!t.done).sort((a,b)=>(a.due||"9999").localeCompare(b.due||"9999")),dn=d.tasks.length-pend.length;
+  const pc=d.tasks.length?Math.round(dn/d.tasks.length*100):0,fm=d.focus[td]||0,st=streak();
+  const avg=d.quizzes.length?Math.round(d.quizzes.reduce((a,q)=>a+q.score/q.total,0)/d.quizzes.length*100)+"%":"-";
+  const qs=d.chat.map((m,i)=>[m,i]).filter(x=>x[0].role=="user").slice(-3).reverse();
+  el.innerHTML=`<div class="hero"><small>${g}</small><h2>${esc(me().name.split(" ")[0])} 👋</h2>
+  <span class="pill">🔥 ${st} day streak</span><span class="pill">⏱ ${fm} min focused today</span>
+  <div class="m" style="color:#fff;opacity:.9;margin-top:6px">Task progress: ${dn}/${d.tasks.length} done</div><div class="bar" style="background:rgba(255,255,255,.25)"><i style="width:${pc}%;background:#fff"></i></div>
+  <button onclick="go('tools','focus')">Start focus session</button></div>
+  <div class="stats"><div class="stat" onclick="go('plan')"><b>${pend.length}</b><span>Pending tasks</span></div><div class="stat" onclick="go('notes')"><b>${d.notes.length}</b><span>Notes</span></div><div class="stat" onclick="go('tools','quiz')"><b>${avg}</b><span>Quiz average</span></div></div>
+  <div class="sec">Quick actions</div><div class="tiles">
+  <div class="tile" onclick="go('chat')"><i>💬</i><b>Ask AI</b><span>Clear your doubts</span></div>
+  <div class="tile" onclick="S.nform=true;go('notes')"><i>📝</i><b>New note</b><span>Capture an idea</span></div>
+  <div class="tile" onclick="go('tools','quiz')"><i>🧠</i><b>Take a quiz</b><span>10+ questions</span></div>
+  <div class="tile" onclick="go('tools','cards')"><i>🗂️</i><b>Flashcards</b><span>Revise faster</span></div></div>
+  <div class="sec">Upcoming deadlines <a onclick="go('plan')">See all</a></div>
+  ${pend.slice(0,4).map(t=>`<div class="item"><button class="chk" onclick="homeDone(${t.id})"></button><div class="grow"><div class="t">${esc(t.title)}</div><div class="m">${t.subj?esc(t.subj)+" · ":""}${esc(dueLbl(t.due)||"No due date")}</div></div><span class="tag ${t.pri}">${t.pri}</span></div>`).join("")||'<div class="empty"><div class="big">🎉</div>No pending tasks. Add one in Planner.</div>'}
+  <div class="sec">Recent questions <a onclick="go('chat')">Open chat</a></div>
+  ${qs.map(([m,i])=>`<div class="item" style="cursor:pointer" onclick="openChatAt(${i})"><div class="grow"><div class="t">${esc(m.content)}</div><div class="m">Tap to see the answer</div></div>›</div>`).join("")||'<p class="m">Your chat questions will appear here.</p>'}`;
+}
+function homeDone(id){D().tasks.find(x=>x.id==id).done=true;mark();render()}
+// ---------- chat
+function vChat(el){
+  const c=D().chat,sug=["Explain photosynthesis simply","Tips to prepare for exams","What is machine learning?"];
+  el.innerHTML=`<div class="chat"><div class="chatbar"><span>AI Tutor</span><button id="cc" class="g sm" onclick="twice('cc',this,'Clear',clearChat)">Clear</button></div>
+  <div id="cb">${c.length?c.map((m,i)=>`<div class="msg ${m.role}" id="m${i}">${m.role=="ai"?md(m.content):esc(m.content)}</div>`).join(""):`<div class="empty" id="em"><div class="big">🤖</div><b>How can I help you study?</b><div class="chips" style="justify-content:center;margin-top:12px">${sug.map(s=>`<button class="g" onclick="sendChat('${s}')">${s}</button>`).join("")}</div></div>`}</div>
+  <div class="chips sc">${["Explain simply: ","Give an example of ","Summarize: ","Quiz me on "].map(s=>`<button class="g" onclick="fillQ('${s}')">${s.replace(/[:]? $/,"")}</button>`).join("")}${detChip()}</div>
+  <div class="composer"><input id="q" placeholder="Ask anything..." onkeydown="if(event.key=='Enter')sendChat()"><button class="send" onclick="sendChat()">${svg("send",20)}</button></div></div>`;
+  const cb=$("cb");cb.scrollTop=1e9;
+  if(S.chatFocus!=null){const i=S.chatFocus,q=$("m"+i);S.chatFocus=null;
+    if(q){const a=$("m"+(i+1));cb.scrollTop=q.getBoundingClientRect().top-cb.getBoundingClientRect().top+cb.scrollTop-10;
+      q.classList.add("hl");if(a&&a.classList.contains("ai"))a.classList.add("hl");
+      setTimeout(()=>{q.classList.remove("hl");a&&a.classList.remove("hl")},4000)}}
+}
+function fillQ(t){const i=$("q");i.value=t;i.focus()}
+function openChatAt(i){S.chatFocus=i;go("chat")}
+async function sendChat(txt){
+  const i=$("q"),t=(txt||i.value).trim();if(!t)return;i.value="";
+  const d=D(),cb=$("cb"),em=$("em");if(em)em.remove();
+  d.chat.push({role:"user",content:t});mark();
+  cb.insertAdjacentHTML("beforeend",`<div class="msg user">${esc(t)}</div><div class="msg ai" id="w">${DOTS}</div>`);cb.scrollTop=1e9;
+  const hist=[{role:"user",content:"You are EduVerse AI, a friendly and professional study assistant for college students. Answer in English."+FMT+" End with one short follow-up suggestion."+(D().pro.on&&S.detail?" The student wants a detailed, in-depth answer: ignore the 200 word limit and use up to about 500 words, including a worked example.":"")},{role:"assistant",content:"Understood."}].concat(d.chat.slice(-10).map(m=>({role:m.role=="ai"?"assistant":"user",content:m.content})));
+  const r=await ai(null,hist);d.chat.push({role:"ai",content:r});save();
+  const w=$("w");if(w){w.innerHTML=md(r);w.removeAttribute("id");w.id="m"+(d.chat.length-1);cb.scrollTop=1e9}
+}
+function clearChat(){D().chat=[];save();render()}
+// ---------- notes
+function vNotes(el){
+  el.innerHTML=`<div class="row"><input id="ns" placeholder="Search notes..." value="${esc(S.nq)}" oninput="S.nq=this.value;drawNotes()"><button onclick="S.nform=!S.nform;render()">${S.nform?"Close":"+ New"}</button></div>
+  ${S.nform?`<div class="card" style="margin-top:12px"><input id="nt" placeholder="Title"><textarea id="nc" rows="5" placeholder="Write your note..."></textarea><button onclick="addNote()">Save note</button></div>`:""}<div id="nl" style="margin-top:12px"></div>`;
+  drawNotes();
+}
+function drawNotes(){
+  const q=S.nq.toLowerCase(),L=D().notes.filter(n=>(n.title+n.content).toLowerCase().includes(q)).sort((a,b)=>(b.pin||0)-(a.pin||0));
+  $("nl").innerHTML=L.map(n=>`<div class="card"><div class="row sp"><b>${esc(n.title)}</b><button class="ib" style="width:32px;height:32px" onclick="pinNote(${n.id})">${n.pin?"⭐":"☆"}</button></div><div class="m">${esc(n.date)}</div>
+  <p style="white-space:pre-wrap;margin:8px 0">${esc(n.content)}</p><div class="row"><button class="g sm" onclick="noteAI(${n.id})">✨ AI summary</button><button class="d sm" onclick="delNote(${n.id})">Delete</button></div><div id="na${n.id}"></div></div>`).join("")||'<div class="empty"><div class="big">📝</div>No notes found.</div>';
+}
+function addNote(){const t=$("nt").value.trim(),c=$("nc").value.trim();if(!t||!c)return;D().notes.unshift({id:Date.now(),title:t,content:c,date:new Date().toLocaleDateString("en-GB")});S.nform=false;mark();render()}
+function delNote(id){D().notes=D().notes.filter(n=>n.id!=id);save();drawNotes()}
+function pinNote(id){const n=D().notes.find(x=>x.id==id);n.pin=n.pin?0:1;save();drawNotes()}
+async function noteAI(id){const n=D().notes.find(x=>x.id==id),b=$("na"+id);b.innerHTML='<div class="msg ai" style="max-width:100%">'+DOTS+'</div>';
+  const r=await ai("Note:\n"+n.content+"\n\nCreate a study summary in clean Markdown with exactly these sections: ## Summary (3 to 4 short bullets), ## Key terms (bullets with **bold** term then a short meaning), ## Revision questions (3 numbered questions). Use simple language.");b.innerHTML=`<div class="msg ai" style="max-width:100%">${md(r)}</div>`}
+// ---------- planner
+function vPlan(el){
+  const all=D().tasks,td=today(),late=t=>!t.done&&t.due&&t.due<td,pf=S.pf;
+  const F={all:()=>true,pending:t=>!t.done,today:t=>t.due==td&&!t.done,overdue:late,done:t=>t.done},po={High:0,Medium:1,Low:2};
+  const ts=all.filter(F[pf]).sort((a,b)=>a.done-b.done||(a.due||"9999").localeCompare(b.due||"9999")||po[a.pri]-po[b.pri]);
+  const dn=all.filter(t=>t.done).length,pc=all.length?Math.round(dn/all.length*100):0;
+  el.innerHTML=`<div class="card"><h3>Add a task</h3><input id="tt" placeholder="Task, e.g. Maths chapter 3"><div class="row wrap" style="margin-top:6px"><input id="ts" placeholder="Subject" style="flex:1;min-width:110px"><input id="td" type="date" value="${td}" style="flex:1;min-width:130px"><select id="tr"><option>High</option><option selected>Medium</option><option>Low</option></select></div><button style="width:100%;margin-top:8px" onclick="addTask()">Add task</button></div>
+  <div class="card"><b>${dn} of ${all.length} done (${pc}%)</b><div class="bar"><i style="width:${pc}%"></i></div>
+  <div class="chips">${["all","pending","today","overdue","done"].map(k=>`<button class="${pf==k?"":"g"}" onclick="S.pf='${k}';render()">${k[0].toUpperCase()+k.slice(1)} (${all.filter(F[k]).length})</button>`).join("")}</div>${dn?`<button class="g sm" onclick="clearDone()">Clear completed</button>`:""}</div>`+
+  (ts.map(t=>S.pedit==t.id?`<div class="card"><input id="e1" value="${esc(t.title)}"><div class="row wrap" style="margin-top:6px"><input id="e2" value="${esc(t.subj)}" placeholder="Subject" style="flex:1;min-width:110px"><input id="e3" type="date" value="${t.due||""}" style="flex:1;min-width:130px"><select id="e4">${["High","Medium","Low"].map(x=>`<option${x==t.pri?" selected":""}>${x}</option>`).join("")}</select></div><div class="row" style="margin-top:8px"><button class="sm" onclick="saveEdit(${t.id})">Save</button><button class="g sm" onclick="S.pedit=null;render()">Cancel</button></div></div>`
+   :`<div class="item"><button class="chk ${t.done?"on":""}" onclick="togTask(${t.id})">${t.done?svg("check",16):""}</button><div class="grow"><div class="t ${t.done?"dn":""}">${esc(t.title)}</div><div class="m">${t.subj?esc(t.subj)+" · ":""}${t.due?esc(dueLbl(t.due)):"No due date"} <span class="tag ${t.pri}">${t.pri}</span>${late(t)?'<span class="tag late">Overdue</span>':""}</div></div>
+   <button class="g sm" onclick="S.pedit=${t.id};render()">Edit</button><button class="d sm" onclick="delTask(${t.id})">✕</button></div>`).join("")||'<div class="empty"><div class="big">✅</div>No tasks in this view.</div>')+
+  `<div class="card" style="margin-top:12px"><h3>✨ AI study plan</h3><div class="row"><input id="hr" type="number" min="1" max="12" value="2" style="max-width:80px"><span class="m" style="flex:1">study hours per day</span><button class="sm" onclick="aiPlan()">Create plan</button></div><div id="ap"></div></div>`;
+}
+function addTask(){const t=$("tt").value.trim();if(!t)return;D().tasks.push({id:Date.now(),title:t,subj:$("ts").value.trim(),due:$("td").value,pri:$("tr").value,done:false});save();render()}
+function saveEdit(id){const t=D().tasks.find(x=>x.id==id),v=$("e1").value.trim();if(!v)return;Object.assign(t,{title:v,subj:$("e2").value.trim(),due:$("e3").value,pri:$("e4").value});S.pedit=null;save();render()}
+function togTask(id){const t=D().tasks.find(x=>x.id==id);t.done=!t.done;if(t.done)mark();save();render()}
+function delTask(id){D().tasks=D().tasks.filter(x=>x.id!=id);save();render()}
+function clearDone(){D().tasks=D().tasks.filter(t=>!t.done);save();render()}
+async function aiPlan(){
+  const o=D().tasks.filter(t=>!t.done).map(t=>`${t.title} [${t.pri}${t.subj?", "+t.subj:""}${t.due?", due "+t.due:""}]`).join("; "),b=$("ap");
+  if(!o){b.innerHTML='<p class="m">Add some pending tasks first.</p>';return}
+  b.innerHTML='<div class="msg ai" style="max-width:100%">'+DOTS+'</div>';
+  const r=await ai(`Today is ${today()}. My pending study tasks: ${o}. I can study ${$("hr").value||2} hours per day. Create a practical day-by-day study plan in clean Markdown. Use a ## heading for each day (for example: ## Day 1 - Monday), bullet points with time blocks and **bold** task names, prioritise high-priority and earlier deadlines, and finish with a short ## Tips section. Keep it concise.`);
+  b.innerHTML=`<div class="msg ai" style="max-width:100%">${md(r)}</div>`;
+}
+// ---------- tools hub
+function vTools(el){
+  const T2=[["quiz","🧠","Quiz","AI quiz, 10 to 25 questions"],["cards","🗂️","Flashcards","Generate and flip to revise"],["focus","⏱️","Focus Timer","Pomodoro with daily stats"],["attend","📋","Attendance","Track % and safe leaves"],["gpa","🎓","GPA Calculator","Semester GPA in seconds"]],P=D().pro.on;
+  el.innerHTML=`<h2>Study tools</h2><div class="tiles">${T2.map(([k,i,n,t])=>`<div class="tile" onclick="go('tools','${k}')"><i>${i}</i><b>${n}</b><span>${t}</span></div>`).join("")}</div>
+  <div class="sec">Pro tools ${P?'<span class="proT">UNLOCKED</span>':'<a onclick="openPro()">Go Pro</a>'}</div>
+  <div class="tiles"><div class="tile" onclick="proGo('photo')"><i>📷</i><b>Photo Solver</b><span>${P?"Solve from a photo":"🔒 Pro feature"}</span></div><div class="tile" onclick="proGo('pdf')"><i>📄</i><b>PDF Assistant</b><span>${P?"Chat with your PDFs":"🔒 Pro feature"}</span></div></div>`;
+}
+// ---------- quiz
+function vQuiz(el){
+  const d=D(),H=d.quizzes.slice(-5).reverse();
+  el.innerHTML=`<div class="card"><h3>Generate a quiz</h3>${S.src?`<div class="chips"><span class="tag">Source: ${esc(S.src.name)}</span><button class="g sm" onclick="S.src=null;render()">Remove</button></div>`:""}<input id="tp" placeholder="Topic, e.g. Photosynthesis" value="${esc(S.qtopic)}">
+  <div class="row wrap" style="margin-top:6px"><select id="qs" style="flex:1;min-width:140px"><option value="">Topic only</option>${d.notes.map(n=>`<option value="${n.id}">From note: ${esc(n.title.slice(0,24))}</option>`).join("")}</select><input id="qn" type="number" min="10" max="25" value="10" style="max-width:76px" title="Questions"></div>
+  <p class="m">At least 10 questions (max 25).</p><button style="width:100%" onclick="genQuiz()">Generate quiz</button></div><div id="qo"></div>
+  ${H.length?`<div class="sec">Recent scores</div>`+H.map(q=>`<div class="item"><div class="grow"><div class="t">${esc(q.topic)}</div><div class="m">${esc(q.date)}</div></div><b>${q.score}/${q.total}</b></div>`).join(""):""}`;
+  if(S.quiz.length)showQuiz();
+}
+async function genQuiz(){
+  const t=$("tp").value.trim(),o=$("qo"),n=Math.min(25,Math.max(10,parseInt($("qn").value)||10)),nid=$("qs").value,note=D().notes.find(x=>x.id==nid);
+  if(!t&&!note&&!S.src){o.innerHTML='<p class="err">Enter a topic or choose a note.</p>';return}
+  S.qtopic=t;o.innerHTML=`<p class="m">Creating ${n} questions...</p>`;
+  const r=await ai((S.src?"Document:\n"+S.src.text+"\n\nBase the questions on this document. ":"")+(note?"Note:\n"+note.content+"\n\nBase the questions on this note. ":"")+`Topic: ${t||(note?note.title:S.src.name)}. Create exactly ${n} multiple choice questions. Return only a JSON array and nothing else: [{"q":"...","options":["A","B","C","D"],"answer":0}] where answer is the index (0-3) of the correct option.`);
+  try{S.quiz=JSON.parse(r.match(/\[[\s\S]*\]/)[0]);S.qsaved=false;S.qname=t||(note?note.title:S.src.name);showQuiz()}catch(e){o.innerHTML=`<div class="card err">Could not build the quiz. Please try again.</div>`}
+}
+function showQuiz(){$("qo").innerHTML=S.quiz.map((q,i)=>`<div class="card"><b>${i+1}. ${esc(q.q)}</b>${q.options.map((o,j)=>`<label class="opt"><input type="radio" name="q${i}" value="${j}">${esc(o)}</label>`).join("")}</div>`).join("")+`<button style="width:100%" onclick="checkQuiz()">Check answers</button><p id="sc" style="text-align:center;font-weight:700;font-size:18px"></p>`}
+function checkQuiz(){let s=0;S.quiz.forEach((q,i)=>document.querySelectorAll(`input[name=q${i}]`).forEach(o=>{const l=o.parentElement,j=+o.value;l.classList.remove("ok","bad");
+  if(j==q.answer)l.classList.add("ok");else if(o.checked)l.classList.add("bad");if(o.checked&&j==q.answer)s++}));
+  $("sc").textContent="Score: "+s+" / "+S.quiz.length;
+  if(!S.qsaved){S.qsaved=true;D().quizzes.push({topic:S.qname||"Quiz",score:s,total:S.quiz.length,date:new Date().toLocaleDateString("en-GB")});mark()}}
+// ---------- flashcards
+function vCards(el){
+  const d=D(),dk=d.decks.find(x=>x.id==S.deck);
+  if(dk){const c=dk.cards[S.ci];
+    el.innerHTML=`<div class="m" style="text-align:center;margin-bottom:8px">${esc(dk.title)} · Card ${S.ci+1} of ${dk.cards.length}</div>
+    <div class="flip ${S.flip?"back":""}" onclick="S.flip=!S.flip;render()">${esc(S.flip?c.back:c.front)}</div><p class="m" style="text-align:center">Tap the card to ${S.flip?"see the question":"reveal the answer"}</p>
+    <div class="row sp"><button class="g" onclick="cardGo(-1)">‹ Prev</button><button class="g" onclick="cardShuffle()">Shuffle</button><button onclick="cardGo(1)">Next ›</button></div>`;return}
+  el.innerHTML=`<div class="card"><h3>Create flashcards</h3><input id="ft" placeholder="Topic, e.g. Newton’s laws"><select id="fs" style="margin-top:6px;width:100%"><option value="">Topic only</option>${d.notes.map(n=>`<option value="${n.id}">From note: ${esc(n.title.slice(0,30))}</option>`).join("")}</select>
+  <button style="width:100%;margin-top:8px" onclick="genDeck()">Generate 12 cards</button><div id="fo"></div></div>
+  ${d.decks.length?`<div class="sec">Your decks</div>`+d.decks.map(x=>`<div class="item"><div class="grow" style="cursor:pointer" onclick="S.deck=${x.id};S.ci=0;S.flip=false;render()"><div class="t">${esc(x.title)}</div><div class="m">${x.cards.length} cards</div></div><button class="d sm" onclick="delDeck(${x.id})">✕</button></div>`).join(""):""}`;
+}
+async function genDeck(){
+  const t=$("ft").value.trim(),note=D().notes.find(x=>x.id==$("fs").value),o=$("fo");
+  if(!t&&!note){o.innerHTML='<p class="err">Enter a topic or choose a note.</p>';return}
+  o.innerHTML='<p class="m">Creating cards...</p>';
+  const r=await ai((note?"Note:\n"+note.content+"\n\n":"")+`Topic: ${t||note.title}. Create exactly 12 study flashcards. Return only a JSON array: [{"front":"question or term","back":"short answer or definition"}].`);
+  try{const cards=JSON.parse(r.match(/\[[\s\S]*\]/)[0]);const id=Date.now();D().decks.unshift({id,title:t||note.title,cards});mark();S.deck=id;S.ci=0;S.flip=false;render()}catch(e){o.innerHTML='<p class="err">Could not create cards. Please try again.</p>'}
+}
+function cardGo(n){const L=D().decks.find(x=>x.id==S.deck).cards.length;S.ci=(S.ci+n+L)%L;S.flip=false;render()}
+function cardShuffle(){const dk=D().decks.find(x=>x.id==S.deck);dk.cards.sort(()=>Math.random()-.5);S.ci=0;S.flip=false;save();render()}
+function delDeck(id){D().decks=D().decks.filter(x=>x.id!=id);save();render()}
+// ---------- focus timer
+const T={mode:"focus",len:25,left:1500,run:false,iv:null};
+const fmt=s=>String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
+function vFocus(el){
+  const d=D(),days=[...Array(7)].map((_,i)=>{const x=new Date();x.setDate(x.getDate()-6+i);return [x.toLocaleDateString("en",{weekday:"short"}).slice(0,2),d.focus[fmtD(x)]||0]}),mx=Math.max(30,...days.map(x=>x[1]));
+  el.innerHTML=`<div class="card" style="text-align:center"><div class="chips" style="justify-content:center" id="pr">${[15,25,45].map(m=>`<button class="${T.len==m?"":"g"}" onclick="tLen(${m})">${m} min</button>`).join("")}</div>
+  <div class="m" id="tm" style="font-weight:600"></div>
+  <div class="ring"><svg width="200" height="200"><circle cx="100" cy="100" r="88" fill="none" stroke="var(--bd)" stroke-width="12"/><circle id="rg" cx="100" cy="100" r="88" fill="none" stroke="#2563eb" stroke-width="12" stroke-linecap="round" stroke-dasharray="553"/></svg><div class="tt" id="tt">00:00</div></div>
+  <div class="row" style="justify-content:center"><button id="tb" onclick="tToggle()">Start</button><button class="g" onclick="tReset()">Reset</button></div></div>
+  <div class="card"><div class="row sp"><b>Today: <span id="tdm">${d.focus[today()]||0}</span> min</b><span class="m">🔥 ${streak()} day streak</span></div><div class="wk">${days.map(x=>`<div><i style="height:${Math.round(x[1]/mx*70)}px"></i>${x[0]}</div>`).join("")}</div><p class="m">Last 7 days (minutes focused). Finish a full focus session to log it.</p></div>`;
+  paintT();
+}
+function paintT(){
+  const tot=(T.mode=="focus"?T.len:5)*60,tt=$("tt");if(!tt)return;
+  tt.textContent=fmt(T.left);$("rg").style.strokeDashoffset=553*(1-T.left/tot);$("tb").textContent=T.run?"Pause":"Start";$("tm").textContent=T.mode=="focus"?"FOCUS TIME":"BREAK TIME";
+  const m=$("tdm");if(m&&DB.session)m.textContent=D().focus[today()]||0;
+}
+function tToggle(){if(T.run){clearInterval(T.iv);T.run=false}else{T.run=true;T.iv=setInterval(tTick,1000)}paintT()}
+function tTick(){
+  if(!DB.session){clearInterval(T.iv);T.run=false;return}
+  T.left--;
+  if(T.left<=0){clearInterval(T.iv);T.run=false;
+    if(T.mode=="focus"){D().focus[today()]=(D().focus[today()]||0)+T.len;mark();T.mode="break";T.left=300}else{T.mode="focus";T.left=T.len*60}}
+  paintT();
+}
+function tLen(m){clearInterval(T.iv);Object.assign(T,{len:m,mode:"focus",left:m*60,run:false});render()}
+function tReset(){clearInterval(T.iv);Object.assign(T,{mode:"focus",left:T.len*60,run:false});paintT()}
+// ---------- attendance
+function vAttend(el){
+  const L=D().attend;
+  el.innerHTML=`<div class="card"><h3>Add a subject</h3><div class="row wrap"><input id="as" placeholder="Subject" style="flex:2;min-width:120px"><input id="aa" type="number" min="0" placeholder="Attended" style="flex:1;min-width:80px"><input id="at" type="number" min="1" placeholder="Total" style="flex:1;min-width:70px"></div>
+  <div class="row" style="margin-top:8px"><span class="m">Required %</span><input id="ar" type="number" value="75" style="max-width:80px"><button style="flex:1" onclick="addAtt()">Add</button></div></div>`+
+  (L.map(a=>{const p=a.tot?a.att/a.tot*100:0,ok=p>=a.req;
+    const msg=ok?`You can miss ${Math.max(0,Math.floor(a.att*100/a.req-a.tot))} more class(es) and stay above ${a.req}%.`:`Attend the next ${Math.ceil((a.req*a.tot-100*a.att)/(100-a.req))} class(es) in a row to reach ${a.req}%.`;
+    return `<div class="card"><div class="row sp"><b>${esc(a.name)}</b><b style="color:${ok?"#16a34a":"#ef4444"}">${p.toFixed(1)}%</b></div><div class="bar"><i style="width:${Math.min(100,p)}%;background:${ok?"#16a34a":"#ef4444"}"></i></div>
+    <div class="m">${a.att} / ${a.tot} classes · ${msg}</div><div class="row" style="margin-top:10px"><button class="sm" onclick="attMark(${a.id},1)">Present</button><button class="g sm" onclick="attMark(${a.id},0)">Absent</button><button class="d sm" style="margin-left:auto" onclick="delAtt(${a.id})">✕</button></div></div>`}).join("")||'<div class="empty"><div class="big">📋</div>Add your subjects to track attendance.</div>');
+}
+function addAtt(){const n=$("as").value.trim(),a=+$("aa").value||0,t=+$("at").value||0,r=Math.min(99,Math.max(1,+$("ar").value||75));if(!n||t<1||a>t)return;D().attend.push({id:Date.now(),name:n,att:a,tot:t,req:r});save();render()}
+function attMark(id,p){const a=D().attend.find(x=>x.id==id);a.tot++;if(p)a.att++;save();render()}
+function delAtt(id){D().attend=D().attend.filter(x=>x.id!=id);save();render()}
+// ---------- gpa
+const GR=[["O",10],["A+",9],["A",8],["B+",7],["B",6],["C",5],["P",4],["F",0]];
+function vGpa(el){
+  const R=D().gpa;let cr=0,pt=0;R.forEach(r=>{cr+=+r.c||0;pt+=(+r.c||0)*r.g});
+  el.innerHTML=`<div class="hero" style="text-align:center"><small>Semester GPA</small><h2 style="font-size:40px;margin:4px 0">${cr?(pt/cr).toFixed(2):"0.00"}</h2><small>${cr} total credits · 10-point scale</small></div>`+
+  R.map((r,i)=>`<div class="item"><input value="${esc(r.n)}" placeholder="Subject" style="flex:2;margin:0" onchange="gSet(${i},'n',this.value)"><input type="number" value="${r.c}" min="0" max="10" style="flex:1;margin:0;max-width:64px" onchange="gSet(${i},'c',+this.value)"><select onchange="gSet(${i},'g',+this.value)">${GR.map(([n,v])=>`<option value="${v}"${v==r.g?" selected":""}>${n}</option>`).join("")}</select><button class="d sm" onclick="gDel(${i})">✕</button></div>`).join("")+
+  `<button style="width:100%" onclick="gAdd()">+ Add subject</button><p class="m">Enter credits and grade for each subject. GPA = sum(credits × grade points) ÷ total credits.</p>`;
+}
+function gSet(i,k,v){D().gpa[i][k]=v;save();render()}
+function gAdd(){D().gpa.push({n:"",c:3,g:10});save();render()}
+function gDel(i){D().gpa.splice(i,1);if(!D().gpa.length)D().gpa.push({n:"",c:3,g:10});save();render()}
+// ---------- profile
+function vProfile(el){
+  const d=D(),th=document.documentElement.dataset.theme||"auto";
+  el.innerHTML=`<div class="card" style="text-align:center"><div class="av" style="width:72px;height:72px;font-size:26px;margin:0 auto 10px">${esc(me().name.trim().split(/\s+/).map(x=>x[0]).join("").slice(0,2).toUpperCase())}</div><b style="font-size:18px">${esc(me().name)}</b><div class="m">${esc(DB.session)}</div>${d.pro.on?'<span class="proT" style="margin-top:8px">PRO MEMBER</span>':""}</div>
+  ${proBox()}
+  <div class="card"><h3>Your activity</h3><div class="stats"><div class="stat"><b>${d.chat.filter(m=>m.role=="user").length}</b><span>Questions</span></div><div class="stat"><b>${d.tasks.filter(t=>t.done).length}</b><span>Tasks done</span></div><div class="stat"><b>${Object.values(d.focus).reduce((a,b)=>a+b,0)}</b><span>Focus min</span></div></div></div>
+  <div class="card"><h3>Theme</h3><div class="sw">${[["light","☀️ Light"],["dark","🌙 Dark"]].map(([k,l])=>`<button class="${th==k?"":"g"}" onclick="setTheme('${k}')">${l}</button>`).join("")}</div></div>
+  <button class="g" style="width:100%;margin-bottom:10px" id="rs" onclick="twice('rs',this,'Reset my data',resetData)">Reset my data</button><button class="d" style="width:100%" onclick="logout()">Logout</button>`;
+}
+function resetData(){me().data={chat:[],notes:[],pdfs:[],tasks:[]};save();go("home")}
+// ---------- PRO
+const PRICE=399;
+function proBox(){
+  const p=D().pro;
+  if(p.on)return `<div class="pro-box on"><div class="row sp"><b>✅ EduVerse Pro is active</b><span class="proT">PRO</span></div><p style="margin:8px 0;font-size:14px">Valid till ${esc(p.till)}. All Pro tools are unlocked.</p><div class="row wrap"><button class="g2" onclick="go('tools','photo')">📷 Photo Solver</button><button class="g2" onclick="go('tools','pdf')">📄 PDF Assistant</button><button class="g2" onclick="openPro()">Manage plan</button></div></div>`;
+  return `<div class="pro-box"><div class="row sp"><b>⭐ EduVerse Pro</b><span class="pp">₹${PRICE}<small>/month</small></span></div>
+  <ul class="pl"><li>📷 <b>Photo Solver:</b> upload a photo of a question and get step-by-step help</li><li>📄 <b>PDF Assistant:</b> upload PDFs, get summaries and answers</li><li>📝 <b>Detailed answers</b> in AI chat</li></ul>
+  <button class="gold" onclick="openPro()">Upgrade to Pro · ₹${PRICE}/month</button></div>`;
+}
+function openPro(){S.prev=[tab,sub];go(tab,"pro")}
+function proGo(k){if(!D().pro.on)return openPro();go("tools",k)}
+function detChip(){const p=D().pro.on;return `<button class="${p&&S.detail?"":"g"}" onclick="toggleDetail()">${p?(S.detail?"✓ Detailed":"Detailed"):"🔒 Detailed (Pro)"}</button>`}
+function toggleDetail(){if(!D().pro.on)return openPro();S.detail=!S.detail;render()}
+function vPro(el){
+  const p=D().pro;S.pay=S.pay||"UPI";
+  if(p.on){
+    el.innerHTML=`${S.paid?`<div class="card" style="text-align:center;border-color:#16a34a"><div style="font-size:36px">🎉</div><b>Payment successful. Welcome to Pro!</b></div>`:""}
+    <div class="proHero"><span class="proT">PRO</span><h2 style="margin:8px 0 2px">EduVerse Pro</h2><div class="m" style="color:#c7d2fe">Your plan is active</div><div class="pr">₹${PRICE}<small> / month</small></div><div class="m" style="color:#c7d2fe">Valid till ${esc(p.till)}</div></div>
+    <div class="tiles"><div class="tile" onclick="go('tools','photo')"><i>📷</i><b>Photo Solver</b><span>Open</span></div><div class="tile" onclick="go('tools','pdf')"><i>📄</i><b>PDF Assistant</b><span>Open</span></div></div>
+    <div class="card" style="margin-top:12px"><h3>Receipt</h3>
+    ${[["Plan","Pro Monthly"],["Amount","₹"+PRICE],["Paid via",p.via],["Started",p.since],["Valid till",p.till],["Transaction ID",p.txn]].map(([k,v])=>`<div class="row sp" style="padding:5px 0"><span class="m">${k}</span><b>${esc(v)}</b></div>`).join("")}
+    <p class="m">Demo receipt. No real payment was taken.</p></div>
+    <button class="d" style="width:100%" id="cp" onclick="twice('cp',this,'Cancel Pro',cancelPro)">Cancel Pro</button>`;
+    S.paid=0;return}
+  const row=(n,f,p2)=>`<tr><td>${n}</td><td>${f}</td><td>${p2}</td></tr>`;
+  el.innerHTML=`<div class="proHero"><span class="proT">PRO</span><h2 style="margin:8px 0 2px">EduVerse Pro</h2><div class="m" style="color:#c7d2fe">Study smarter with premium tools</div><div class="pr">₹${PRICE}<small> / month</small></div><div class="m" style="color:#c7d2fe">Cancel anytime · All prices in INR</div></div>
+  <div class="card"><h3>What you get with Pro</h3>
+  <div class="feat"><i>📷</i><div><b>Photo Solver</b><div class="m">Take a photo of a question, a diagram or handwritten notes. Get a step-by-step solution, a simple explanation, typed-out text or revision notes.</div></div></div>
+  <div class="feat"><i>📄</i><div><b>PDF Assistant</b><div class="m">Upload your PDF notes or textbook chapters. Get a summary, key points, answers to your own questions, and a quiz made from the PDF.</div></div></div>
+  <div class="feat"><i>📝</i><div><b>Detailed answers</b><div class="m">Switch on Detailed mode in AI chat for longer, in-depth explanations with worked examples.</div></div></div>
+  <div class="feat"><i>🏅</i><div><b>PRO badge</b><div class="m">A PRO badge next to your name in the app header and profile.</div></div></div></div>
+  <div class="card"><h3>Free vs Pro</h3><table class="cmp"><tr><th>Feature</th><th>Free</th><th>Pro</th></tr>
+  ${row("AI chat, Notes, Planner","✓","✓")}${row("Quiz and Flashcards","✓","✓")}${row("Focus timer, Attendance, GPA","✓","✓")}${row("Detailed chat answers","-","✓")}${row("Photo Solver (images)","-","✓")}${row("PDF Assistant","-","✓")}${row("PRO badge","-","✓")}</table></div>
+  <div class="card"><div class="step"><span>1</span>Your plan</div>
+  <div class="item"><div class="grow"><div class="t">Pro Monthly</div><div class="m">Renews every month. Cancel anytime.</div></div><b>₹${PRICE}</b></div>
+  <div class="step" style="margin-top:14px"><span>2</span>Choose a payment method</div>
+  ${["UPI","Debit / Credit card","Net banking"].map(m=>`<label class="opt"><input type="radio" name="pm" ${S.pay==m?"checked":""} onchange="S.pay='${m}'">${m}</label>`).join("")}
+  <div class="step" style="margin-top:14px"><span>3</span>Confirm and pay</div>
+  <div class="row sp"><span class="m">Total today</span><b style="font-size:22px">₹${PRICE}</b></div>
+  <button class="gold" style="margin-top:10px" onclick="payNow(this)">Pay ₹${PRICE} (Demo)</button>
+  <p class="m" style="text-align:center;margin-bottom:0">Demo mode: no real payment is taken and no card details are collected.</p></div>`;
+}
+function payNow(b){
+  b.disabled=true;b.textContent="Processing payment...";
+  setTimeout(()=>{const f=x=>x.toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}),d=new Date(),e=new Date();e.setDate(e.getDate()+30);
+    D().pro={on:true,since:f(d),till:f(e),via:S.pay||"UPI",txn:"DEMO"+Math.random().toString(36).slice(2,10).toUpperCase()};S.paid=1;mark();save();render()},1300)}
+function cancelPro(){D().pro={on:false};S.detail=false;save();render()}
+// ---- Photo Solver
+let PH=null;
+function vPhoto(el){
+  el.innerHTML=`<div class="card"><h3>Photo Solver <span class="proT">PRO</span></h3><p class="m">Upload or take a photo of a question, a diagram or handwritten notes.</p>
+  <label class="drop">📷 Tap to take or choose a photo<input type="file" id="pi" accept="image/*" hidden></label><div id="pv"></div>
+  <input id="phint" placeholder="Optional hint, e.g. Solve question 3" style="margin-top:10px">
+  <div class="chips">${[["solve","Solve step by step"],["explain","Explain simply"],["text","Extract text"],["notes","Make revision notes"]].map(([k,l])=>`<button onclick="photoRun('${k}')">${l}</button>`).join("")}</div></div><div id="po"></div>`;
+  $("pi").onchange=e=>e.target.files[0]&&loadPhoto(e.target.files[0]);
+  if(PH)showPhoto();
+}
+function showPhoto(){$("pv").innerHTML=`<img src="${PH.url}" alt="Selected photo" style="max-width:100%;max-height:260px;border-radius:12px;margin-top:10px;display:block">`}
+async function loadPhoto(f){
+  try{const bmp=await createImageBitmap(f),sc=Math.min(1,1400/Math.max(bmp.width,bmp.height)),c=document.createElement("canvas");
+    c.width=Math.round(bmp.width*sc);c.height=Math.round(bmp.height*sc);c.getContext("2d").drawImage(bmp,0,0,c.width,c.height);
+    const blob=await new Promise(r=>c.toBlob(r,"image/jpeg",.85));PH={blob,url:c.toDataURL("image/jpeg",.7)};showPhoto();$("po").innerHTML=""}
+  catch(e){$("pv").innerHTML='<p class="err">Could not read this image. Please try a JPG or PNG photo.</p>'}
+}
+async function photoRun(mode){
+  const o=$("po");if(!PH){o.innerHTML='<p class="err">Choose a photo first.</p>';return}
+  o.innerHTML='<div class="msg ai" style="max-width:100%">'+DOTS+'</div>';
+  try{
+    const I={solve:"Solve the problem(s) shown in the image step by step. Show each step clearly and end with a bold **Final answer**.",explain:"Explain what is shown in the image in simple language for a college student, with a short example if helpful.",text:"Extract all the text from the image as written, keeping its structure. If it is handwritten, do your best and mark unclear words with [?].",notes:"Turn the content of the image into clean revision notes with headings, bullet points and bold key terms."}[mode];
+    const hint=$("phint").value.trim();
+    const r={text:await aiImage(I+(hint?"\nStudent hint: "+hint:"")+"\nFormat the answer in clean Markdown with ## headings and bullet points where useful.",PH.blob)};
+    PH.last=r.text;o.innerHTML=`<div class="msg ai" style="max-width:100%">${md(r.text)}</div><button class="g sm" style="margin-top:6px" onclick="photoSave()">Save to Notes</button>`;
+  }catch(e){o.innerHTML=`<div class="card err">Could not analyse the photo (${esc(e.code||"error")}). Please try again.</div>`}
+}
+function photoSave(){D().notes.unshift({id:Date.now(),title:"Photo Solver result",content:PH.last,date:new Date().toLocaleDateString("en-GB")});mark();save();$("po").insertAdjacentHTML("beforeend",'<span class="ok2"> Saved to Notes ✓</span>')}
+// ---- PDF Assistant
+function pst(m,bad){const e=$("ps");if(e){e.className=bad?"err":"ok2";e.textContent=m}}
+function vPdf(el){
+  const L=D().pdfs,p=L.find(x=>x.id==S.psel);
+  el.innerHTML=`<div class="card"><h3>Upload a PDF <span class="proT">PRO</span></h3><label class="drop" id="dz">📄 Tap to choose a PDF<input type="file" id="pf" accept="application/pdf" hidden></label><div id="ps" class="m"></div>
+  <details><summary>PDF not reading? Paste text instead</summary><input id="mn" placeholder="Document name"><textarea id="mt" rows="4" placeholder="Paste the text here..."></textarea><button class="g sm" onclick="pdfText()">Add text</button></details></div>`+
+  (L.map(x=>`<div class="item" style="cursor:pointer;${x.id==S.psel?"border-color:var(--pri);border-width:2px":""}" onclick="S.psel=${x.id};render()"><div class="grow"><div class="t">📄 ${esc(x.name)}</div><div class="m">${x.pages?x.pages+" pages · ":""}${x.text.length} characters · ${esc(x.date||"")}</div></div></div>`).join("")||'<div class="empty"><div class="big">📄</div>No documents yet. Upload a PDF to start.</div>')+
+  (p?`<div class="card"><h3>${esc(p.name)}</h3><div class="chips"><button onclick="pdfAsk(${p.id},'Summarize this document in a short paragraph.','Summary')">Summarize</button><button onclick="pdfAsk(${p.id},'List the key points as short bullet points.','Key points')">Key points</button><button onclick="pdfAsk(${p.id},'Explain this document simply, as if to a beginner.','Simple explanation')">Explain simply</button><button class="g" onclick="pdfQuiz(${p.id})">Make quiz</button></div>
+  <div id="pqa">${(p.qa||[]).map(m=>`<div class="msg ${m.role}" style="max-width:100%">${m.role=="ai"?md(m.content):esc(m.content)}</div>`).join("")}</div>
+  <div class="row"><input id="pq" placeholder="Ask a question about this PDF..." onkeydown="if(event.key=='Enter')pdfAsk(${p.id})"><button onclick="pdfAsk(${p.id})">Ask</button></div>
+  <button class="d sm" style="margin-top:10px" id="dp" onclick="twice('dp',this,'Delete document',()=>delPdf(${p.id}))">Delete document</button></div>`:"");
+  const dz=$("dz");$("pf").onchange=e=>e.target.files[0]&&readPdf(e.target.files[0]);
+  dz.ondragover=e=>e.preventDefault();dz.ondrop=e=>{e.preventDefault();e.dataTransfer.files[0]&&readPdf(e.dataTransfer.files[0])};
+}
+function addDoc(name,text,pages){const o={id:Date.now(),name,text:text.slice(0,15000),pages,date:new Date().toLocaleDateString("en-GB"),qa:[]};D().pdfs.unshift(o);S.psel=o.id;mark();save();render()}
+function pdfText(){const n=$("mn").value.trim()||"Pasted text",t=$("mt").value.trim();if(t.length<20){pst("Paste at least a few sentences.",1);return}addDoc(n,t,0)}
+async function readPdf(f){
+  if(!/\.pdf$/i.test(f.name)){pst("Please choose a PDF file.",1);return}
+  pst("Reading "+f.name+"...");
+  try{
+    if(!window.pdfjsLib)throw new Error("the PDF reader could not load; use the paste-text option");
+    pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+    const pdf=await pdfjsLib.getDocument({data:new Uint8Array(await f.arrayBuffer()),isEvalSupported:false}).promise;let t="";
+    for(let i=1;i<=Math.min(pdf.numPages,50);i++){pst("Reading page "+i+" of "+pdf.numPages+"...");const c=await(await pdf.getPage(i)).getTextContent();t+=c.items.map(x=>x.str).join(" ")+"\n"}
+    if(t.trim().length<20)throw new Error("no text found (this may be a scanned PDF); use the Photo Solver or paste the text");
+    addDoc(f.name,t,pdf.numPages);
+  }catch(x){pst("Could not read this PDF: "+x.message,1)}
+}
+async function pdfAsk(id,q,label){
+  const p=D().pdfs.find(x=>x.id==id),i=$("pq");q=q||(i&&i.value.trim());if(!q)return;if(i)i.value="";
+  p.qa=p.qa||[];p.qa.push({role:"user",content:label||q});
+  $("pqa").insertAdjacentHTML("beforeend",`<div class="msg user" style="max-width:100%">${esc(label||q)}</div><div class="msg ai" id="pw" style="max-width:100%">${DOTS}</div>`);
+  const r=await ai("Document:\n"+p.text+"\n\nUsing only this document, respond to: "+q+"."+FMT);
+  p.qa.push({role:"ai",content:r});p.qa=p.qa.slice(-30);save();const w=$("pw");if(w){w.innerHTML=md(r);w.removeAttribute("id")}
+}
+function pdfQuiz(id){const p=D().pdfs.find(x=>x.id==id);S.src={name:p.name,text:p.text};S.quiz=[];go("tools","quiz")}
+function delPdf(id){D().pdfs=D().pdfs.filter(p=>p.id!=id);S.psel=null;save();render()}
+render();
+</script>
+
+</body>
+</html>
